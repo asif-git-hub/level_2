@@ -9,37 +9,32 @@ export function Home() {
   const [allObituaries, setAllObituaries] = useState([])
   const [loading, setLoading] = useState(false)
 
-  useEffect( () => {
+  useEffect(() => {
     async function fetchAllObituaries() {
-       setLoading(true)
-       const data = await getAll()
-       setAllObituaries(data)
+      setLoading(true)
+      const data = await getAll()
+      setAllObituaries(data)
     }
     fetchAllObituaries()
     setLoading(false)
-  },[])
+  }, [])
 
-  return (
-    loading?
+  return loading ? (
     <div>
-        <p>Loading</p>
+      <p>Loading</p>
     </div>
-    :
+  ) : (
     <div>
       <Navbar showForm={showForm} setShowForm={setShowForm}></Navbar>
       <div className="items-center">
-        {
-            allObituaries?.items?.length > 0?
-            allObituaries.items.map((item, id) => {
-                return <Item key={id} {...item}></Item>
+        {allObituaries?.items?.length > 0
+          ? allObituaries.items.map((item, id) => {
+              return <Item key={id} {...item}></Item>
             })
-            :
-            ""
-        }
+          : ""}
       </div>
 
       <FormModal showForm={showForm} setShowForm={setShowForm}></FormModal>
-
     </div>
   )
 }

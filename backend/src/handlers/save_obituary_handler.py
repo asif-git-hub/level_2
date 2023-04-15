@@ -3,8 +3,10 @@ import os
 import json
 import base64
 import urllib.parse
+import uuid
+import time
 
-
+# STEP 4
 def lambda_handler(event, context):
 
     dynamodb = boto3.resource("dynamodb")
@@ -23,11 +25,13 @@ def lambda_handler(event, context):
     obituaryText = (jsonish.get(b'obituaryText'))[0].decode('utf-8')
     
     response = table.put_item(Item = {
+        'id': str(uuid.uuid4()),
         'name': name,
         'birthDate': birthDate,
         'deathDate': deathDate,
         'imageRef': imageRef,
         'obituaryText': obituaryText,
+        'created_at': str(int(time.time()))
         })
 
     print(response)

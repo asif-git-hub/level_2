@@ -9,11 +9,10 @@ const Navbar = ({ showForm, setShowForm }) => {
             <h3>The Last Show</h3>
           </div>
           <div className="obituary-btn-container ">
-          <button className="obituary-btn" onClick={() => setShowForm(true)}>
-            + New Obituary
-          </button>
+            <button className="obituary-btn" onClick={() => setShowForm(true)}>
+              + New Obituary
+            </button>
           </div>
-
         </div>
       </div>
     </nav>

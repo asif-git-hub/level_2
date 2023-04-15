@@ -24,9 +24,9 @@ export async function createObituary(
 }
 
 export async function getAll() {
+  const url =
+    "https://uuxu2q3zofwueysqqof5lrkhxm0commm.lambda-url.ap-south-1.on.aws"
 
-    const url = "https://uuxu2q3zofwueysqqof5lrkhxm0commm.lambda-url.ap-south-1.on.aws"
-
-    const response = await get(url)
-    return response.body
+  const response = await get(url)
+  return response.body
 }

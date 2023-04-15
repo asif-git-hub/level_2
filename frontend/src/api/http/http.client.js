@@ -11,14 +11,13 @@ export async function get(url, headers) {
 }
 
 export async function post(url, body) {
-
-    const response = await axios({
+  const response = await axios({
     method: "post",
     url,
     data: body,
     headers: {
-        'Content-Type': "application/x-www-form-urlencoded",
-    }
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
   })
 
   return response.data

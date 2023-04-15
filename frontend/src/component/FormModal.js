@@ -16,15 +16,29 @@ export function FormModal({ showForm, setShowForm }) {
   const [obituaryText, setObituaryText] = useState("") // From ChatGPT
   const [buttonText, setButtonText] = useState("Write Obituary")
 
+  // Refs
+  const hiddenFileInput = useRef(null)
+
   function handleNameChange(e) {
     setName(e.target.value)
+  }
+
+  function handleFileUploadButtonClick() {
+    hiddenFileInput.current.click()
+  }
+
+  function handleImageChange(e) {
+    const fileUploaded = e.target.files[0]
+    console.log(fileUploaded)
   }
 
   async function handleSubmit(e) {
     e.preventDefault()
     console.log("Submitting request")
-    
-    setButtonText("Please Wait. Its not like they're gonna be late for something.. ")
+
+    setButtonText(
+      "Please Wait. Its not like they're gonna be late for something.. "
+    )
     await createObituary(name, birthDate, deathDate, imageRef, obituaryText)
     setButtonText("Write Obituary")
     setShowForm(false)
@@ -41,19 +55,39 @@ export function FormModal({ showForm, setShowForm }) {
           <FaTimes></FaTimes>
         </button>
         <div>
+          <div className="image-upload-container">
+            <button
+              className="image-upload-btn"
+              onClick={handleFileUploadButtonClick}
+            >
+              <p>Select an image for the deceased</p>
+            </button>
+
+            <input
+              className=""
+              type="file"
+              accept="image/*"
+              ref={hiddenFileInput}
+              onChange={handleImageChange}
+              style={{ visibility: "hidden" }}
+            ></input>
+          </div>
+
           <form onSubmit={handleSubmit}>
             {/* Name field */}
-            <label>
-              <input
-                id="name"
-                type="text"
-                name="name"
-                placeholder="Name of the deceased"
-                required={true}
-                className="form-input"
-                onChange={handleNameChange}
-              ></input>
-            </label>
+            <div className="name-input-container">
+              <label>
+                <input
+                  id="name"
+                  type="text"
+                  name="name"
+                  placeholder="Name of the deceased"
+                  required={true}
+                  className="form-input"
+                  onChange={handleNameChange}
+                ></input>
+              </label>
+            </div>
 
             <div className="datepickers">
               <div>
@@ -76,7 +110,7 @@ export function FormModal({ showForm, setShowForm }) {
                   }
                 ></DatePicker>
               </div>
-            
+
               <div className="datepickers">
                 <div>
                   Died: {deathDate}
@@ -100,8 +134,6 @@ export function FormModal({ showForm, setShowForm }) {
                   ></DatePicker>
                 </div>
               </div>
-            
-
             </div>
 
             <button type="submit" className="submit-btn">

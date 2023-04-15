@@ -2,6 +2,7 @@ import requests
 import json
 import boto3
 
+# STEP 1
 def lambda_handler(event, context):
     
     print("Initialize generation")
@@ -13,14 +14,12 @@ def lambda_handler(event, context):
     obituary = create_obituary(prompt)
     print(obituary)
 
-    return json.dumps({
+    return {
         "name": event["name"],
         "birth_date": event["birth_date"],
         "death_date": event["death_date"],
-        "obituary": obituary
-    })
-
-
+        "obituary": obituary.replace("\n", "")
+    }
 
 def create_prompt(name, birth_date, death_date):
 
