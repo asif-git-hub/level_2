@@ -22,3 +22,16 @@ export async function post(url, body) {
 
   return response.data
 }
+
+export async function postFormData(url, form) {
+  const response = await axios({
+    method: "post",
+    url,
+    data: form,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  })
+
+  return response.data
+}

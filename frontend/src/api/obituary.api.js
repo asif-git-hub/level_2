@@ -1,31 +1,36 @@
-import { post, get } from "./http/http.client"
+import { post, get, postFormData } from "./http/http.client"
 
 export async function createObituary(
+  id,
   name,
   birthDate,
   deathDate,
-  imageRef,
-  obituaryText
+  imageData
 ) {
   const url =
-    "https://f2czaxpf62jyctbg5bzwwc6rvy0zalch.lambda-url.ap-south-1.on.aws"
+    "https://7kq6pai4iuapmzallto2k72dva0hbffd.lambda-url.ap-south-1.on.aws"
   const request = {
     name: name,
     birth_date: birthDate,
     death_date: deathDate,
-    imageRef:
-      "https://i.etsystatic.com/31309176/r/il/d0f1dd/3470296538/il_570xN.3470296538_o99j.jpg",
-    obituaryText: "CHATGPT generated text Placeholder",
+    imageData,
   }
 
+  const formData = new FormData()
+  formData.append("id", id)
+  formData.append("name", name)
+  formData.append("birth_date", birthDate)
+  formData.append("death_date", deathDate)
+  formData.append("image_data", imageData)
+
   console.log("posting..", request)
-  const response = await post(url, request)
+  const response = await postFormData(url, formData)
   return response.body
 }
 
 export async function getAll() {
   const url =
-    "https://uuxu2q3zofwueysqqof5lrkhxm0commm.lambda-url.ap-south-1.on.aws"
+    "https://tjse66g54jzw4bgcctrocv7rgi0mzkir.lambda-url.ap-south-1.on.aws"
 
   const response = await get(url)
   return response.body

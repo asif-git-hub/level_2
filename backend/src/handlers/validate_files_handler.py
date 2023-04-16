@@ -1,10 +1,3 @@
-import boto3
-import os
-import json
-import time
-
-
-# STEP 4
 '''
 request
 {
@@ -17,26 +10,17 @@ request
   "mp3_url": "http://res.cloudinary.com/du5wbd7af/raw/upload/v1681624781/c3rtcmwkgjygud6votgq.mp3"
 }
 '''
+# STEP 3
 def lambda_handler(event, context):
+    image_url = event["image_url"].split("image/upload/")
+    new_image_url = f"{image_url[0]}image/upload/e_art:zorro/{image_url[1]}"
 
-    dynamodb = boto3.resource("dynamodb")
-    table_name = os.environ["TABLE_NAME"]
-    table = dynamodb.Table(table_name)
-
-    status = 201
-
-    response = table.put_item(Item = {
-        'id': event["id"],
-        'name': event["name"],
-        'birth_date': event["birth_date"],
-        'death_date': event["death_date"],
-        'obituary': event["obituary"],
-        'image_url': event["image_url"],
-        'mp3_url': event["mp3_url"],
-        'created_at': str(int(time.time()))
-        })
-    
-    return json.dumps({ 
-        "status": status,
-    })
-
+    return {
+        "id": event["id"],
+        "name": event["name"],
+        "birth_date": event["birth_date"],
+        "death_date": event["death_date"],
+        "obituary": event["obituary"],
+        "image_url": new_image_url,
+        "mp3_url": event["mp3_url"]
+    }

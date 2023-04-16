@@ -5,6 +5,7 @@ import obImg from "../assets/ob-img.png"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import { createObituary } from "../api/obituary.api"
+import { v4 as uuidv4 } from "uuid"
 
 export function FormModal({ showForm, setShowForm }) {
   // States
@@ -12,9 +13,11 @@ export function FormModal({ showForm, setShowForm }) {
   const [name, setName] = useState("")
   const [birthDate, setBirthDate] = useState("yyyy-mm-dd, --:--: --")
   const [deathDate, setDeathDate] = useState(new Date().toISOString())
-  const [imageRef, setImageRef] = useState("") // Cloudanary
-  const [obituaryText, setObituaryText] = useState("") // From ChatGPT
+  const [image, setImage] = useState({ preview: "", data: "" })
+  const [id, setId] = useState("")
   const [buttonText, setButtonText] = useState("Write Obituary")
+  const [isFormDisabled, setIsFormDisabled] = useState(false)
+  const [imageUploadText, setImageUploadText] = useState("Select an image for the deceased")
 
   // Refs
   const hiddenFileInput = useRef(null)
@@ -29,7 +32,11 @@ export function FormModal({ showForm, setShowForm }) {
 
   function handleImageChange(e) {
     const fileUploaded = e.target.files[0]
-    console.log(fileUploaded)
+    setImage({
+      preview: URL.createObjectURL(e.target.files[0]),
+      data: e.target.files[0],
+    })
+    setImageUploadText(fileUploaded.name)
   }
 
   async function handleSubmit(e) {
@@ -39,9 +46,17 @@ export function FormModal({ showForm, setShowForm }) {
     setButtonText(
       "Please Wait. Its not like they're gonna be late for something.. "
     )
-    await createObituary(name, birthDate, deathDate, imageRef, obituaryText)
+    setIsFormDisabled(true)
+
+    const id = uuidv4()
+
+    setId(id)
+
+    await createObituary(id, name, birthDate, deathDate, image.data)
     setButtonText("Write Obituary")
     setShowForm(false)
+    setIsFormDisabled(false)
+
   }
 
   return (
@@ -60,7 +75,7 @@ export function FormModal({ showForm, setShowForm }) {
               className="image-upload-btn"
               onClick={handleFileUploadButtonClick}
             >
-              <p>Select an image for the deceased</p>
+              <p>{imageUploadText}</p>
             </button>
 
             <input
@@ -136,7 +151,7 @@ export function FormModal({ showForm, setShowForm }) {
               </div>
             </div>
 
-            <button type="submit" className="submit-btn">
+            <button type="submit" className="submit-btn" disabled={isFormDisabled}>
               {buttonText}
             </button>
           </form>
